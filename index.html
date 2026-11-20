@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Pameran DTP - Cloud Engineering</title>
+  
+  <!-- Fonts: Plus Jakarta Sans (Modern & Clean seperti referensi Deflexai) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          screens: {
+            'xs': '420px',
+          },
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              200: '#bae0fd',
+              300: '#7cc5fb',
+              400: '#38a5f6',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#FAFAFB] text-slate-800 font-sans antialiased selection:bg-sky-500 selection:text-white relative overflow-x-hidden">
+
+  <!-- ========================================================
+       TOP NAVBAR (Responsive Floating Pill Bar + Mobile Menu)
+       ======================================================== -->
+  <header class="fixed top-3 sm:top-4 inset-x-0 z-50 px-3 sm:px-4">
+    <nav class="max-w-5xl mx-auto bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-full px-4 sm:px-5 py-2 sm:py-2.5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] flex items-center justify-between transition-all duration-300 relative">
+      
+      <!-- Brand Logo -->
+      <a href="#hero" class="flex items-center gap-2 group flex-shrink-0">
+        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm group-hover:scale-105 transition-transform">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+          </svg>
+        </div>
+        <div class="leading-tight">
+          <span class="font-bold text-slate-900 tracking-tight text-sm sm:text-base">Cloud<span class="text-sky-600">Hub</span></span>
+        </div>
+      </a>
+
+      <!-- Navigation Links (Desktop) -->
+      <div class="hidden md:flex items-center gap-5 lg:gap-6 text-xs lg:text-sm font-medium text-slate-600">
+        <a href="#pengenalan" class="hover:text-slate-950 transition-colors">Pengenalan</a>
+        <a href="#kurikulum" class="hover:text-slate-950 transition-colors">Materi & Core Skills</a>
+        <a href="#tools" class="hover:text-slate-950 transition-colors">Tools & Ekosistem</a>
+        <a href="#karir" class="hover:text-slate-950 transition-colors">Prospek Karir</a>
+        <a href="#faq" class="hover:text-slate-950 transition-colors">FAQ</a>
+      </div>
+
+      <!-- Action Buttons & Hamburger (Mobile / Desktop) -->
+      <div class="flex items-center gap-1.5 sm:gap-2.5">
+        <button id="btnOpenGame" class="hidden sm:flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all">
+          <span>🎮</span>
+          <span>Mini Game</span>
+        </button>
+        <a href="#kurikulum" class="text-xs font-semibold px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-sm hover:shadow hover:-translate-y-0.5">
+          Eksplorasi
+        </a>
+        <!-- Hamburger Button (Mobile only) -->
+        <button id="btnToggleMobile" aria-label="Buka Menu Navigasi" class="md:hidden w-8 h-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center hover:bg-slate-200 transition-colors">
+          <svg id="hamburgerIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg id="closeMenuIcon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Dropdown Menu -->
+      <div id="mobileMenu" class="menu-hidden md:hidden absolute top-[calc(100%+8px)] inset-x-0 bg-white/95 backdrop-blur-lg border border-slate-200/90 rounded-2xl p-4 shadow-xl flex flex-col gap-2.5 text-left text-sm font-semibold text-slate-700">
+        <a href="#pengenalan" class="mobile-nav-link p-2 rounded-xl hover:bg-slate-50 transition-colors">📖 Pengenalan</a>
+        <a href="#kurikulum" class="mobile-nav-link p-2 rounded-xl hover:bg-slate-50 transition-colors">📚 Materi & Core Skills</a>
+        <a href="#tools" class="mobile-nav-link p-2 rounded-xl hover:bg-slate-50 transition-colors">🛠️ Tools & Ekosistem</a>
+        <a href="#karir" class="mobile-nav-link p-2 rounded-xl hover:bg-slate-50 transition-colors">💼 Prospek Karir</a>
+        <a href="#faq" class="mobile-nav-link p-2 rounded-xl hover:bg-slate-50 transition-colors">❓ FAQ Stand</a>
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+          <button id="btnOpenGameMobile" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-slate-100 text-slate-800 text-xs font-bold hover:bg-slate-200 transition-all">
+            <span>🎮 Mainkan Mini Game Stand</span>
+          </button>
+        </div>
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- ========================================================
+       HERO SECTION (Orbit Sesuai Referensi Foto 1 Deflexai)
+       Responsif di Mobile, Tablet, dan Desktop
+       ======================================================== -->
+  <section id="hero" class="relative min-h-[90vh] pt-28 sm:pt-36 pb-16 sm:pb-20 flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+    
+    <!-- Background Radial Soft Glow -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[500px] md:w-[700px] h-[320px] sm:h-[500px] md:h-[700px] bg-gradient-to-tr from-sky-100/50 via-blue-50/30 to-transparent rounded-full blur-3xl -z-20 pointer-events-none"></div>
+
+    <!-- Background Concentric Orbital Rings (Responsif Skala Ukuran di Mobile & Desktop) -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 overflow-hidden">
+      <!-- Ring Luar -->
+      <div class="orbit-circle w-[320px] h-[320px] xs:w-[380px] xs:h-[380px] sm:w-[540px] sm:h-[540px] md:w-[740px] md:h-[740px] lg:w-[960px] lg:h-[960px] opacity-70"></div>
+      <!-- Ring Tengah -->
+      <div class="orbit-circle w-[230px] h-[230px] xs:w-[270px] xs:h-[270px] sm:w-[400px] sm:h-[400px] md:w-[540px] md:h-[540px] lg:w-[720px] lg:h-[720px] opacity-60"></div>
+      <!-- Ring Dalam -->
+      <div class="orbit-circle w-[150px] h-[150px] xs:w-[170px] xs:h-[170px] sm:w-[270px] sm:h-[270px] md:w-[380px] md:h-[380px] lg:w-[480px] lg:h-[480px] opacity-50 border-dashed"></div>
+    </div>
+
+    <!-- ========================================================
+         FLOATING TECH ICONS (SISI KIRI LUAR - TERTATA AMAN)
+         ======================================================== -->
+    <div class="pointer-events-none">
+      
+      <!-- 1. Docker (Atas Kiri) - Muncul di md & lg -->
+      <div class="hidden md:block absolute left-4 lg:left-12 xl:left-24 top-28 sm:top-36 animate-float pointer-events-auto" title="Docker Containerization">
+        <div class="hero-floating-icon w-10 h-10 lg:w-13 lg:h-13">
+          <svg class="w-5 h-5 lg:w-7 lg:h-7 text-[#1D63ED]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.186.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.186.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.186.186.186m5.893 2.714h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.186.186 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186H8.1a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.185-.186H5.136a.186.186 0 00-.186.185v1.888c0 .102.084.185.186.185m-2.928 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.185-.186H2.208a.186.186 0 00-.186.185v1.888c0 .102.084.185.186.185m21.758 1.484c-.456-.307-1.424-.46-2.518-.088-.198-.444-.476-.84-.814-1.173a3.54 3.54 0 00-1.282-.777c-.452-.162-1.218-.293-2.164-.293H.186A.186.186 0 000 12.35v1.947c0 .77.14 1.517.417 2.222.844 2.146 2.664 3.652 4.962 4.108 1.488.295 3.125.295 4.613 0 .753-.15 1.48-.403 2.158-.755a13.3 13.3 0 003.555-2.822c.762-.876 1.344-1.895 1.706-2.99.394.02.775.02 1.135-.01.597-.05 1.137-.2 1.606-.445.69-.36.966-.88.986-1.196.02-.314-.146-.666-.35-.805"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 2. Linux Ubuntu (Tengah Kiri) -->
+      <div class="hidden md:block absolute left-2 lg:left-8 xl:left-14 top-1/2 -translate-y-12 animate-float-delayed pointer-events-auto" title="Ubuntu Linux Server">
+        <div class="hero-floating-icon w-10 h-10 lg:w-13 lg:h-13">
+          <svg class="w-5 h-5 lg:w-7 lg:h-7 text-[#E95420]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2.182c5.422 0 9.818 4.396 9.818 9.818 0 5.422-4.396 9.818-9.818 9.818-5.422 0-9.818-4.396-9.818-9.818 0-5.422 4.396-9.818 9.818-9.818zM4.636 9.818a2.182 2.182 0 100 4.364 2.182 2.182 0 000-4.364zm11.237-4.218a2.182 2.182 0 10-2.182 3.778 2.182 2.182 0 002.182-3.778zm-2.182 10.604a2.182 2.182 0 102.182 3.778 2.182 2.182 0 00-2.182-3.778z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 3. Google Cloud (Bawah Kiri) -->
+      <div class="hidden md:block absolute left-6 lg:left-14 xl:left-28 bottom-24 sm:bottom-32 animate-float-slow pointer-events-auto" title="Google Cloud Platform">
+        <div class="hero-floating-icon w-10 h-10 lg:w-13 lg:h-13">
+          <svg class="w-5 h-5 lg:w-7 lg:h-7" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+            <path fill="#34A853" d="M19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3z"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================
+         FLOATING TECH ICONS (SISI KANAN LUAR - TERTATA AMAN)
+         ======================================================== -->
+    <div class="pointer-events-none">
+      
+      <!-- 4. AWS (Atas Kanan) -->
+      <div class="hidden md:block absolute right-4 lg:left-auto lg:right-12 xl:right-24 top-28 sm:top-36 animate-float-delayed pointer-events-auto" title="Amazon Web Services">
+        <div class="hero-floating-icon w-10 h-10 lg:w-13 lg:h-13">
+          <svg class="w-5 h-5 lg:w-7 lg:h-7 text-[#FF9900]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.5 14.5c-.8.6-2 1-3.3 1-2.2 0-3.6-1.1-3.6-2.7 0-1.8 1.5-2.7 3.8-2.7.9 0 1.8.2 2.3.4v-.4c0-.9-.6-1.5-1.9-1.5-.9 0-1.8.3-2.5.7l-.5-1.1c.9-.5 2-.8 3.3-.8 2.1 0 3.2 1.1 3.2 2.9v4.6h-1.5l-.2-.4zm-.8-2.6c-.5-.2-1.1-.3-1.8-.3-1.4 0-2.2.6-2.2 1.5 0 .8.6 1.4 1.8 1.4.8 0 1.6-.3 2.2-.7v-1.9zm-8.8-3.3l1.8 6.5h-1.6l-1-4-1 4H6.5L4.7 8.6h1.7l1 4.1 1-4.1h1.7zm13.1 7.2c-.4.4-1.2.6-2.2.6-1.9 0-3.6-.8-5.3-1.8l.8-1.2c1.4.9 2.8 1.5 4.3 1.5.8 0 1.3-.2 1.5-.5.2-.3.1-.7-.4-1.1-.6-.5-1.4-.9-2.3-1.4-1.3-.7-2.1-1.6-2.1-2.8 0-1.8 1.4-3.1 3.7-3.1 1.6 0 2.9.5 3.9 1.2l-.7 1.2c-.8-.6-1.9-1-3.1-1-1.4 0-2.1.7-2.1 1.6 0 .7.4 1.2 1.3 1.7.9.5 1.8.9 2.5 1.4 1.3.9 1.7 1.9 1.7 2.8 0 1.2-.5 2.1-1.5 2.7z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 5. Microsoft Azure (Tengah Kanan) -->
+      <div class="hidden md:block absolute right-2 lg:right-8 xl:right-14 top-1/2 -translate-y-12 animate-float pointer-events-auto" title="Microsoft Azure Cloud">
+        <div class="hero-floating-icon w-10 h-10 lg:w-13 lg:h-13">
+          <svg class="w-5 h-5 lg:w-7 lg:h-7 text-[#0089D6]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13.05 4.24l-6.8 11.96 4.7 3.56 5.56-9.61-3.46-5.91zm-7.7 13.06l3.52 2.7h-7.6l2.36-4.08 1.72 1.38zm8.68-13.06l4.24 7.42-3.17 5.54 7.63 2.8-8.7-15.76z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 6. GitHub CI/CD (Bawah Kanan) -->
+      <div class="hidden md:block absolute right-6 lg:right-14 xl:right-28 bottom-24 sm:bottom-32 animate-float-delayed pointer-events-auto" title="GitHub Actions CI/CD">
+        <div class="hero-floating-icon w-10 h-10 lg:w-13 lg:h-13">
+          <svg class="w-5 h-5 lg:w-7 lg:h-7 text-slate-900" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================
+         KONTEN UTAMA HERO (RESPONSIF - DI TENGAH)
+         ======================================================== -->
+    <div class="relative z-10 max-w-3xl mx-auto flex flex-col items-center w-full px-1">
+      
+      <!-- Subtitle Stand Header -->
+      <div class="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs md:text-sm font-medium text-slate-500 mb-4 sm:mb-5 tracking-wide flex-wrap justify-center">
+        <span>Pameran DTP (Digital Talent Program)</span>
+        <span class="text-slate-300">•</span>
+        <span class="text-slate-700 font-semibold">Konsentrasi Cloud Engineer</span>
+      </div>
+
+      <!-- Headline Utama (Responsif Font Size untuk Mobile & Desktop) -->
+      <h1 class="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.18] sm:leading-[1.14] mb-4 sm:mb-6 max-w-full">
+        Membangun & Mengelola <br class="hidden sm:inline">
+        <span class="bg-gradient-to-r from-slate-900 via-sky-800 to-sky-600 bg-clip-text text-transparent">Infrastruktur Cloud</span> Modern
+      </h1>
+
+      <!-- Paragraf Penjelas (Bahasa Ramah untuk Orang Awam, Siswa SMK & Guru) -->
+      <p class="max-w-2xl text-sm sm:text-base lg:text-lg text-slate-600 font-normal leading-relaxed mb-6 sm:mb-8 px-2">
+        Melihat lebih dekat bagaimana siswa SMK belajar mengoperasikan server, melakukan deployment aplikasi otomatis, dan menjaga layanan internet tetap aman serta aktif 24 jam nonstop.
+      </p>
+
+      <!-- Tombol Aksi (Responsif: Full width di HP kecil, inline di layar sedang) -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full sm:w-auto mb-10 sm:mb-12 px-4 sm:px-0">
+        <a href="#kurikulum" class="px-6 py-3 rounded-full bg-slate-900 text-white font-semibold text-xs sm:text-sm hover:bg-slate-800 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 text-center">
+          <span>Pelajari Materi DTP</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </a>
+        <a href="#pengenalan" class="px-6 py-3 rounded-full bg-white border border-slate-200 text-slate-700 font-semibold text-xs sm:text-sm hover:bg-slate-50 hover:border-slate-300 transition-all text-center">
+          Apa itu Cloud Engineer?
+        </a>
+      </div>
+
+      <!-- Live Server Status Card (Responsif Width & Padding) -->
+      <div class="w-full max-w-sm sm:max-w-md mx-auto px-2 sm:px-0">
+        <div class="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-3.5 sm:p-4 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.08)] text-left flex items-start gap-3 transition-transform hover:scale-[1.02]">
+          <div class="relative flex-shrink-0">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-white text-sm sm:text-base font-bold shadow-sm">
+              ☁️
+            </div>
+            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-1">
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900 truncate">Sistem Server DTP Aktif</h4>
+              <span class="text-[9px] sm:text-[10px] font-mono font-medium text-emerald-600 bg-emerald-50 px-1.5 sm:px-2 py-0.5 rounded-full border border-emerald-100 flex-shrink-0">99.98% Uptime</span>
+            </div>
+            <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 truncate">Docker Container • Ubuntu Linux • Nginx</p>
+            <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-600 font-mono">
+              <span class="flex items-center gap-1.5 text-slate-500">
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>
+                CI/CD Pipeline
+              </span>
+              <span class="text-slate-400">Siap Demo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ========================================================
+       LOGO TECH STRIP (Clean & Responsif)
+       ======================================================== -->
+  <section class="border-y border-slate-200/70 bg-white/70 backdrop-blur-sm py-6 sm:py-7 px-4">
+    <div class="max-w-6xl mx-auto">
+      <p class="text-center text-[11px] sm:text-xs font-semibold tracking-wider text-slate-400 uppercase mb-4 sm:mb-5">
+        Teknologi & Platform Standar Industri yang Dikuasai
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-8 md:gap-12 lg:gap-16 opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
+        <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-xs sm:text-sm bg-slate-50 sm:bg-transparent px-3 py-1 sm:p-0 rounded-full border border-slate-100 sm:border-0">
+          <span>🐧 Ubuntu Linux</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-xs sm:text-sm bg-slate-50 sm:bg-transparent px-3 py-1 sm:p-0 rounded-full border border-slate-100 sm:border-0">
+          <span>🐳 Docker</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-xs sm:text-sm bg-slate-50 sm:bg-transparent px-3 py-1 sm:p-0 rounded-full border border-slate-100 sm:border-0">
+          <span>☁️ AWS</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-xs sm:text-sm bg-slate-50 sm:bg-transparent px-3 py-1 sm:p-0 rounded-full border border-slate-100 sm:border-0">
+          <span>🌐 Google Cloud</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-xs sm:text-sm bg-slate-50 sm:bg-transparent px-3 py-1 sm:p-0 rounded-full border border-slate-100 sm:border-0">
+          <span>🔷 Microsoft Azure</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-xs sm:text-sm bg-slate-50 sm:bg-transparent px-3 py-1 sm:p-0 rounded-full border border-slate-100 sm:border-0">
+          <span>⚡ Nginx</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-xs sm:text-sm bg-slate-50 sm:bg-transparent px-3 py-1 sm:p-0 rounded-full border border-slate-100 sm:border-0">
+          <span>📊 Grafana</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION: PENGENALAN UNTUK ORANG AWAM (Slide Image 2 Info)
+       ======================================================== -->
+  <section id="pengenalan" class="py-16 sm:py-20 px-4 max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      
+      <!-- Sisi Kiri: Visual Showcase -->
+      <div class="lg:col-span-5 relative">
+        <div class="relative bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 text-white shadow-xl overflow-hidden border border-slate-700">
+          
+          <!-- Hiasan Cahaya Biru -->
+          <div class="absolute -top-16 -right-16 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+          <!-- Judul Sesuai Foto 2 -->
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-3 sm:mb-4">
+            Cloud Engineer
+          </h2>
+
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-5 sm:mb-6">
+            Mempelajari cara mengelola server berbasis cloud untuk menyimpan data, menjalankan aplikasi, melakukan deployment, serta memonitor layanan digital.
+          </p>
+
+          <!-- Metrics Box -->
+          <div class="grid grid-cols-2 gap-2.5 sm:gap-3 pt-4 border-t border-slate-700/80">
+            <div class="p-2.5 sm:p-3 bg-slate-800/80 rounded-xl border border-slate-700">
+              <span class="text-[11px] sm:text-xs text-slate-400 block">Fokus Utama</span>
+              <span class="text-xs sm:text-sm font-bold text-white mt-1 block">Infrastruktur & Server</span>
+            </div>
+            <div class="p-2.5 sm:p-3 bg-slate-800/80 rounded-xl border border-slate-700">
+              <span class="text-[11px] sm:text-xs text-slate-400 block">Kesiapan Kerja</span>
+              <span class="text-xs sm:text-sm font-bold text-sky-400 mt-1 block">Standar Industri</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Decorative Floating Badge (Sederhana & Responsif) -->
+        <div class="mt-3 sm:mt-0 sm:absolute sm:-bottom-5 sm:-right-3 lg:right-4 bg-white border border-slate-200 shadow-md sm:shadow-lg rounded-xl sm:rounded-2xl p-3 flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 flex items-center justify-center font-bold text-base flex-shrink-0">
+            💡
+          </div>
+          <div>
+            <div class="text-[11px] sm:text-xs font-bold text-slate-900">Analogi Sederhana:</div>
+            <div class="text-[10px] sm:text-[11px] text-slate-500">"Arsitek & Penjaga Gedung Internet"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sisi Kanan: Penjelasan Ramah Awam & Guru -->
+      <div class="lg:col-span-7 space-y-4 sm:space-y-5">
+        <div>
+          <h3 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+            Apa yang Sebenarnya Dikerjakan oleh Seorang Cloud Engineer?
+          </h3>
+          <p class="text-slate-600 text-xs sm:text-sm md:text-base leading-relaxed mt-2 sm:mt-3">
+            Bagi orang awam, internet sering dianggap bekerja secara ajaib. Padahal di baliknya, ada <strong>Cloud Engineer</strong> yang merancang dan memastikan website sekolah, aplikasi bank, dan media sosial selalu menyala dan tidak lemot saat diakses jutaan orang secara serentak.
+          </p>
+        </div>
+
+        <!-- 3 Poin Kunci Penjelasan -->
+        <div class="space-y-3 pt-1">
+          
+          <div class="flex items-start gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-slate-300 transition-colors">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center font-bold flex-shrink-0 text-xs sm:text-sm">
+              1
+            </div>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900">Menyimpan & Menjalankan Tanpa Komputer Fisik di Rumah</h4>
+              <p class="text-[11px] sm:text-xs text-slate-600 mt-1">
+                Alih-alih membeli komputer server mahal yang memakan listrik di rumah, siswa diajarkan menyewa komputer super di internet (Cloud) seperti AWS dan Google Cloud.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-slate-300 transition-colors">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center font-bold flex-shrink-0 text-xs sm:text-sm">
+              2
+            </div>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900">Automasi & Deployment Cepat (CI/CD)</h4>
+              <p class="text-[11px] sm:text-xs text-slate-600 mt-1">
+                Ketika programmer memperbarui aplikasi, sistem yang dibuat siswa dapat otomatis mengetes dan memasang versi terbaru ke server tanpa membuat website mati sedetik pun.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-slate-300 transition-colors">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center font-bold flex-shrink-0 text-xs sm:text-sm">
+              3
+            </div>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900">Keamanan & Pemantauan Nonstop (Monitoring)</h4>
+              <p class="text-[11px] sm:text-xs text-slate-600 mt-1">
+                Mendeteksi serangan virus, gangguan jaringan, atau server yang penuh memori secara langsung melalui dashboard visual seperti Grafana.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION: KURIKULUM & MATERI (Direct Transcribe from Image 2)
+       ======================================================== -->
+  <section id="kurikulum" class="py-16 sm:py-20 px-4 bg-slate-50/60 border-t border-slate-200/80">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+          Apa Saja yang Kami Pelajari di DTP?
+        </h2>
+        <p class="text-slate-600 text-xs sm:text-sm md:text-base mt-2 px-2">
+          Kombinasi materi teknis mendalam dan kompetensi pendukung yang disusun secara sistematis agar siswa siap menghadapi tantangan industri teknologi.
+        </p>
+
+        <!-- Category Filter Pills (Responsif Wrap di Mobile) -->
+        <div class="flex flex-wrap items-center justify-center p-1 sm:p-1.5 bg-white border border-slate-200 rounded-2xl sm:rounded-full shadow-sm mt-6 gap-1 max-w-full">
+          <button class="filter-btn active-tab text-[11px] sm:text-xs md:text-sm font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-full transition-all" data-category="all">
+            Semua Materi
+          </button>
+          <button class="filter-btn text-[11px] sm:text-xs md:text-sm font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-full text-slate-600 hover:text-slate-900 transition-all" data-category="core">
+            Core Skills
+          </button>
+          <button class="filter-btn text-[11px] sm:text-xs md:text-sm font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-full text-slate-600 hover:text-slate-900 transition-all" data-category="pendukung">
+            Kompetensi Pendukung
+          </button>
+          <button class="filter-btn text-[11px] sm:text-xs md:text-sm font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-full text-slate-600 hover:text-slate-900 transition-all" data-category="tools">
+            Tools
+          </button>
+        </div>
+      </div>
+
+      <!-- Skills Cards Grid (1 kolom di HP, 2 di tablet, 3 di laptop/desktop) -->
+      <div id="skillsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+
+        <!-- Card: Dasar Cloud Computing -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="core">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            ☁️
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">Dasar Cloud Computing</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Memahami arsitektur komputasi awan, model layanan (IaaS, PaaS, SaaS), serta cara kerja pusat data global.
+          </p>
+        </div>
+
+        <!-- Card: Linux Server Administration -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="core">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            🐧
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">Linux Server Administration</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Menguasai sistem operasi Ubuntu Server, hak akses pengguna, manajemen memori, konfigurasi SSH, dan proses sistem.
+          </p>
+        </div>
+
+        <!-- Card: Virtualisasi (VMware / Proxmox) -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="core">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            🖥️
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">Virtualisasi (VMware & Proxmox)</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Membagi satu server fisik menjadi banyak komputer virtual mandiri (VM) untuk efisiensi biaya dan daya komputasi.
+          </p>
+        </div>
+
+        <!-- Card: Docker & Containerization -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="core">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            🐳
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">Docker & Containerization</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Membungkus aplikasi beserta seluruh konfigurasinya ke dalam kontainer ringan agar dapat dijalankan seragam di mana pun.
+          </p>
+        </div>
+
+        <!-- Card: Cloud Deployment & Web Server -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="core">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            🌐
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">Cloud Deployment & Web Server</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Menghubungkan aplikasi ke dunia luar menggunakan web server Nginx dan Apache dengan Reverse Proxy dan domain kustom.
+          </p>
+        </div>
+
+        <!-- Card: CI/CD Dasar & Otomasi -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="core">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            ⚡
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">CI/CD Dasar (GitHub Actions)</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Mengotomatiskan alur pengujian kode dan rilis aplikasi secara instan begitu kode baru diunggah ke repository GitHub.
+          </p>
+        </div>
+
+        <!-- Card: Server & Application Monitoring -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="core">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            📊
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">Monitoring & Observability</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Memantau grafik kesehatan server (penggunaan RAM, CPU, dan trafik jaringan) menggunakan Prometheus dan dashboard Grafana.
+          </p>
+        </div>
+
+        <!-- Card: Cloud Storage & IaC -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="core">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            🗄️
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">Cloud Storage & IaC Dasar</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Menyimpan data file skala besar (Object Storage S3) dan mengatur infrastruktur server menggunakan kode terstruktur.
+          </p>
+        </div>
+
+        <!-- Card: Cloud Security Dasar -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="core">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            🛡️
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">Cloud Security Dasar</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Pengaturan firewall (UFW), manajemen sertifikat SSL/HTTPS, proteksi serangan DDOS, dan enkripsi data penting.
+          </p>
+        </div>
+
+        <!-- Card: Dasar Jaringan Komputer (Pendukung) -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="pendukung">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            🔌
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">Dasar Jaringan Komputer</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Konsep IP Address, Subnetting, DNS, Routing, Port, dan protokol TCP/UDP sebagai dasar komunikasi server.
+          </p>
+        </div>
+
+        <!-- Card: Bash Scripting & Python (Pendukung) -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="pendukung">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            📜
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">Bash Scripting & Python Dasar</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Menulis skrip baris perintah untuk mengotomasi rutinitas backup file harian, pembersihan log server, dan tugas berulang.
+          </p>
+        </div>
+
+        <!-- Card: Git & GitHub (Pendukung) -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="pendukung">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            🐙
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">Git, GitHub & Dokumentasi</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Manajemen versi kode, kolaborasi tim profesional, dokumentasi teknis yang rapi, dan project management modern.
+          </p>
+        </div>
+
+        <!-- Card: DevOps Culture & AI Productivity (Pendukung) -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="pendukung">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            🤖
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">DevOps Culture & AI Productivity</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Pola pikir integrasi antar pengembang dan operasional, serta pemanfaatan AI untuk mempercepat pembuatan skrip dan troubleshooting.
+          </p>
+        </div>
+
+        <!-- Card: Ekosistem Tools Lengkap (Tools) -->
+        <div class="skill-card bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group" data-type="tools">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-base sm:text-lg mb-3.5 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+            🛠️
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">14+ Tools Standar Industri</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Mulai dari Ubuntu, Docker, Nginx, Apache, AWS, GCP, Azure, Proxmox, VMware, hingga Grafana & Prometheus.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION: TOOLS & EKOSISTEM TEKNOLOGI (From Image 2)
+       ======================================================== -->
+  <section id="tools" class="py-16 sm:py-20 px-4 max-w-6xl mx-auto">
+    
+    <!-- Section Header -->
+    <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+        Ekosistem & Perangkat Lunak
+      </h2>
+      <p class="text-slate-600 text-xs sm:text-sm md:text-base mt-2 px-2">
+        Daftar lengkap software dan penyedia cloud yang dipelajari dan diimplementasikan langsung dalam simulasi proyek nyata.
+      </p>
+    </div>
+
+    <!-- Category Grid (Responsif: 1 kolom di HP, 2 di tablet, 4 di desktop) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+
+      <!-- Kolom 1: Operating System & Server -->
+      <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 flex items-center justify-center text-xs sm:text-sm font-bold">
+            OS
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">Server & Web Engine</h3>
+        </div>
+        <ul class="space-y-2.5 sm:space-y-3">
+          <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-800">Ubuntu Server</span>
+            <span class="text-[10px] text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">OS Utama</span>
+          </li>
+          <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-800">Nginx</span>
+            <span class="text-[10px] text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">Web & Proxy</span>
+          </li>
+          <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-800">Apache HTTP</span>
+            <span class="text-[10px] text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">Web Server</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kolom 2: Kontainer & Virtualisasi -->
+      <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 flex items-center justify-center text-xs sm:text-sm font-bold">
+            VM
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">Virtualisasi & Container</h3>
+        </div>
+        <ul class="space-y-2.5 sm:space-y-3">
+          <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-800">Docker</span>
+            <span class="text-[10px] text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">Container</span>
+          </li>
+          <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-800">Proxmox VE</span>
+            <span class="text-[10px] text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">Hypervisor</span>
+          </li>
+          <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-800">VMware ESXi</span>
+            <span class="text-[10px] text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">Virtual Machine</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kolom 3: Cloud Provider Global -->
+      <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 flex items-center justify-center text-xs sm:text-sm font-bold">
+            CSP
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">Cloud Providers</h3>
+        </div>
+        <ul class="space-y-2.5 sm:space-y-3">
+          <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-800">AWS (Amazon)</span>
+            <span class="text-[10px] text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">EC2 & S3</span>
+          </li>
+          <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-800">Google Cloud (GCP)</span>
+            <span class="text-[10px] text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">Compute Engine</span>
+          </li>
+          <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-800">Microsoft Azure</span>
+            <span class="text-[10px] text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">Virtual Network</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kolom 4: Otomasi & Observabilitas -->
+      <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 flex items-center justify-center text-xs sm:text-sm font-bold">
+            OPS
+          </div>
+          <h3 class="font-bold text-slate-900 text-sm">CI/CD & Monitoring</h3>
+        </div>
+        <ul class="space-y-2.5 sm:space-y-3">
+          <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-800">GitHub Actions</span>
+            <span class="text-[10px] text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">Pipeline Otomatis</span>
+          </li>
+          <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-800">Grafana</span>
+            <span class="text-[10px] text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">Visual Dashboard</span>
+          </li>
+          <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span class="font-semibold text-slate-800">Prometheus</span>
+            <span class="text-[10px] text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">Metric Collector</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION: PROSPEK KARIR LULUSAN (Khusus Guru & Siswa SMK)
+       ======================================================== -->
+  <section id="karir" class="py-16 sm:py-20 px-4 bg-slate-900 text-white relative overflow-hidden">
+    
+    <!-- Background Glow Accent -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-sky-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto relative z-10">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+          Peluang & Prospek Karir
+        </h2>
+        <p class="text-slate-300 text-xs sm:text-sm md:text-base mt-2 px-2">
+          Kompetensi yang dipelajari membuka peluang karir bernilai tinggi di era digital yang sangat dibutuhkan oleh perusahaan teknologi nasional maupun global.
+        </p>
+      </div>
+
+      <!-- Career Cards Grid (Responsif Grid) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+
+        <!-- 1. Cloud Engineer -->
+        <div class="bg-slate-800/80 backdrop-blur-sm border border-slate-700/80 rounded-2xl p-5 sm:p-6 hover:border-slate-500 transition-all hover:-translate-y-1">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center font-bold text-base sm:text-lg mb-3.5">
+            🚀
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-white mb-2">Cloud Engineer</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Merancang, membangun, dan memelihara arsitektur cloud agar aplikasi berjalan cepat, hemat biaya, dan memiliki skalabilitas tinggi.
+          </p>
+          <div class="mt-4 pt-3 border-t border-slate-700/80 flex items-center justify-between text-[11px] text-slate-400">
+            <span>Kebutuhan Industri</span>
+            <span class="font-bold text-sky-400">Sangat Tinggi 🔥</span>
+          </div>
+        </div>
+
+        <!-- 2. DevOps Engineer (Junior) -->
+        <div class="bg-slate-800/80 backdrop-blur-sm border border-slate-700/80 rounded-2xl p-5 sm:p-6 hover:border-slate-500 transition-all hover:-translate-y-1">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center font-bold text-base sm:text-lg mb-3.5">
+            🔄
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-white mb-2">DevOps Engineer (Junior)</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Menghubungkan tim software developer dengan tim IT operasional melalui otomatisasi deployment dan integrasi kode berkesinambungan.
+          </p>
+          <div class="mt-4 pt-3 border-t border-slate-700/80 flex items-center justify-between text-[11px] text-slate-400">
+            <span>Peran</span>
+            <span class="font-bold text-sky-400">Jembatan Otomasi</span>
+          </div>
+        </div>
+
+        <!-- 3. Cloud Administrator -->
+        <div class="bg-slate-800/80 backdrop-blur-sm border border-slate-700/80 rounded-2xl p-5 sm:p-6 hover:border-slate-500 transition-all hover:-translate-y-1">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center font-bold text-base sm:text-lg mb-3.5">
+            ⚙️
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-white mb-2">Cloud Administrator</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Mengatur hak akses pengguna, memantau utilisasi tagihan biaya cloud perusahaan, serta menjamin kebijakan keamanan data ditaati.
+          </p>
+          <div class="mt-4 pt-3 border-t border-slate-700/80 flex items-center justify-between text-[11px] text-slate-400">
+            <span>Fokus</span>
+            <span class="font-bold text-sky-400">Manajemen & Biaya</span>
+          </div>
+        </div>
+
+        <!-- 4. Cloud Support Engineer -->
+        <div class="bg-slate-800/80 backdrop-blur-sm border border-slate-700/80 rounded-2xl p-5 sm:p-6 hover:border-slate-500 transition-all hover:-translate-y-1">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center font-bold text-base sm:text-lg mb-3.5">
+            🎧
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-white mb-2">Cloud Support Engineer</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Membantu klien menyelesaikan permasalahan teknis jaringan, troubleshooting instance VM, dan pemulihan data ketika terjadi kendala.
+          </p>
+          <div class="mt-4 pt-3 border-t border-slate-700/80 flex items-center justify-between text-[11px] text-slate-400">
+            <span>Fokus</span>
+            <span class="font-bold text-sky-400">Problem Solving</span>
+          </div>
+        </div>
+
+        <!-- 5. Infrastructure Engineer -->
+        <div class="bg-slate-800/80 backdrop-blur-sm border border-slate-700/80 rounded-2xl p-5 sm:p-6 hover:border-slate-500 transition-all hover:-translate-y-1">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-700 text-white flex items-center justify-center font-bold text-base sm:text-lg mb-3.5">
+            🏗️
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-white mb-2">Infrastructure Engineer</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Membangun fondasi komputasi hibrida (gabungan server fisik on-premise di sekolah/kantor dengan server cloud publik).
+          </p>
+          <div class="mt-4 pt-3 border-t border-slate-700/80 flex items-center justify-between text-[11px] text-slate-400">
+            <span>Fokus</span>
+            <span class="font-bold text-sky-400">Fondasi Jaringan</span>
+          </div>
+        </div>
+
+        <!-- 6. Card Penutup untuk Guru & Siswa -->
+        <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-5 sm:p-6 flex flex-col justify-between text-white shadow-lg">
+          <div>
+            <h3 class="text-base sm:text-lg font-bold leading-snug mb-2 text-white">
+              Siswa SMK Siap Masuk Industri Digital
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Dengan kurikulum terarah di program DTP, siswa tidak hanya belajar teori tapi langsung memegang terminal Linux dan mengonfigurasi cloud nyata.
+            </p>
+          </div>
+          <div class="mt-4 sm:mt-5 text-xs font-semibold text-sky-400">
+            Kunjungi stand kami untuk diskusi lebih lanjut! ✨
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SECTION: FAQ (Pertanyaan Umum untuk Orang Awam & Guru)
+       ======================================================== -->
+  <section id="faq" class="py-16 sm:py-20 px-4 max-w-4xl mx-auto">
+    
+    <!-- Section Header -->
+    <div class="text-center mb-8 sm:mb-10">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        Pertanyaan yang Sering Diajukan di Stand
+      </h2>
+      <p class="text-slate-600 text-xs sm:text-sm mt-2 px-2">
+        Penjelasan sederhana untuk pertanyaan yang sering diajukan oleh guru, siswa SMK, dan pengunjung umum.
+      </p>
+    </div>
+
+    <!-- Accordion Items -->
+    <div class="space-y-2.5 sm:space-y-3">
+
+      <!-- Item 1 -->
+      <div class="faq-item bg-white border border-slate-200/90 rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-sm transition-all">
+        <button class="faq-btn w-full flex items-center justify-between text-left font-bold text-slate-900 text-xs sm:text-sm md:text-base gap-2">
+          <span>Apakah belajar Cloud Computing membutuhkan laptop dengan spek sangat mahal?</span>
+          <span class="faq-icon text-slate-400 text-lg transition-transform duration-200 flex-shrink-0">+</span>
+        </button>
+        <div class="faq-content hidden mt-3 pt-3 border-t border-slate-100 text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <strong>Sama sekali tidak!</strong> Justru salah satu keuntungan utama komputasi awan adalah proses komputasi yang berat berjalan di server pusat (seperti server AWS atau Google Cloud). Laptop siswa hanya bertindak sebagai terminal pengendali via peramban (browser) atau SSH ringan.
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="faq-item bg-white border border-slate-200/90 rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-sm transition-all">
+        <button class="faq-btn w-full flex items-center justify-between text-left font-bold text-slate-900 text-xs sm:text-sm md:text-base gap-2">
+          <span>Apa perbedaan antara Web Developer dan Cloud Engineer?</span>
+          <span class="faq-icon text-slate-400 text-lg transition-transform duration-200 flex-shrink-0">+</span>
+        </button>
+        <div class="faq-content hidden mt-3 pt-3 border-t border-slate-100 text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Ibarat sebuah restoran: <strong>Web Developer</strong> adalah koki yang memasak makanan lezat (tampilan dan fitur aplikasi yang dilihat pengguna), sedangkan <strong>Cloud Engineer</strong> adalah pihak yang membangun gedung restoran, memastikan listrik, air, gas, dan keamanannya tidak pernah padam agar koki bisa menyajikan ribuan makanan tanpa gangguan.
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="faq-item bg-white border border-slate-200/90 rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-sm transition-all">
+        <button class="faq-btn w-full flex items-center justify-between text-left font-bold text-slate-900 text-xs sm:text-sm md:text-base gap-2">
+          <span>Apakah siswa SMK bisa langsung bersaing di dunia industri setelah lulus program ini?</span>
+          <span class="faq-icon text-slate-400 text-lg transition-transform duration-200 flex-shrink-0">+</span>
+        </button>
+        <div class="faq-content hidden mt-3 pt-3 border-t border-slate-100 text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Bisa! Materi DTP Cloud Engineer mengacu pada standar kurikulum industri terkini seperti Linux Server, Docker, dan CI/CD. Siswa dibekali portofolio proyek konkret sehingga siap mengambil peran level junior seperti Junior DevOps, Cloud Support, maupun IT Infrastructure.
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="faq-item bg-white border border-slate-200/90 rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-sm transition-all">
+        <button class="faq-btn w-full flex items-center justify-between text-left font-bold text-slate-900 text-xs sm:text-sm md:text-base gap-2">
+          <span>Kenapa kita harus menggunakan Docker daripada menginstall langsung di komputer?</span>
+          <span class="faq-icon text-slate-400 text-lg transition-transform duration-200 flex-shrink-0">+</span>
+        </button>
+        <div class="faq-content hidden mt-3 pt-3 border-t border-slate-100 text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Docker memecahkan masalah klasik <em>"di laptop saya jalan, tapi di laptop teman kok error?"</em>. Dengan Docker, semua dependensi dibungkus rapat dalam satu wadah (kontainer), sehingga di mana pun dijalankan, hasilnya dijamin 100% sama dan konsisten.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       STAND INTERACTIVE BANNER (Mini Game Showcase)
+       ======================================================== -->
+  <section class="py-8 sm:py-12 px-4 max-w-5xl mx-auto">
+    <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-6 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-5 sm:gap-6 shadow-sm">
+      <div class="space-y-1.5 text-center sm:text-left">
+        <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-slate-900">
+          Uji Refleksmu di Mini Game "Cloud Catcher"!
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600 max-w-lg">
+          Tangkap data cloud, aktifkan perisai server, dan hindari virus bergerigi! Capai skor 150 untuk kode hadiah di stand kami.
+        </p>
+      </div>
+      <button id="btnOpenGameBanner" class="w-full sm:w-auto px-6 py-3 rounded-full bg-slate-900 text-white font-semibold text-xs sm:text-sm hover:bg-slate-800 transition-all shadow hover:shadow-md flex items-center justify-center gap-2 flex-shrink-0">
+        <span>🎮 Mainkan Sekarang</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       FOOTER (Clean & Simple)
+       ======================================================== -->
+  <footer class="border-t border-slate-200/80 bg-white py-8 sm:py-10 px-4 text-center">
+    <div class="max-w-4xl mx-auto space-y-2">
+      <div class="flex items-center justify-center gap-2">
+        <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] sm:text-xs">
+          ☁️
+        </div>
+        <span class="font-bold text-slate-900 text-xs sm:text-sm">Pameran DTP • Cloud Engineering Stand</span>
+      </div>
+      <p class="text-[11px] sm:text-xs text-slate-500 max-w-md mx-auto px-2">
+        Website informasi statis untuk pameran karya siswa SMK program Digital Talent Program (DTP). Dibuat dengan HTML, Tailwind CSS, dan Vanilla JavaScript.
+      </p>
+      <div class="text-[10px] sm:text-[11px] text-slate-400 pt-1">
+        &copy; 2026 Tim Stand DTP Cloud. Hanya untuk keperluan pameran dan edukasi publik.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================
+       MODAL MINI GAME (Cloud Catcher - Stand Game)
+       Responsif di HP dan Layar Besar
+       ======================================================== -->
+  <div id="gameModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-md sm:max-w-lg w-full max-h-[92vh] flex flex-col overflow-hidden shadow-2xl border border-slate-200">
+      <!-- Modal Header -->
+      <div class="px-4 py-3 sm:px-5 sm:py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50 flex-shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="text-sm sm:text-base">🎮</span>
+          <span class="font-bold text-slate-900 text-xs sm:text-sm">Cloud Catcher – Mini Game Stand</span>
+        </div>
+        <button id="btnCloseGame" aria-label="Tutup Game" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-200/80 hover:bg-slate-300 text-slate-700 flex items-center justify-center text-xs sm:text-sm font-bold transition-colors">
+          ✕
+        </button>
+      </div>
+      <!-- Modal Iframe Body (Responsif Height) -->
+      <div class="w-full h-[60vh] sm:h-[500px] bg-slate-900 relative flex-1">
+        <iframe id="gameFrame" src="about:blank" class="w-full h-full border-0"></iframe>
+      </div>
+      <!-- Modal Footer -->
+      <div class="px-4 py-2.5 sm:px-5 sm:py-3 border-t border-slate-100 flex items-center justify-between text-[11px] sm:text-xs text-slate-500 bg-white flex-shrink-0">
+        <span class="hidden xs:inline">Gunakan kursor / sentuh layar / ← →</span>
+        <span class="xs:hidden">Geser kursor / layar</span>
+        <a href="Cloud Catcher – CLOUDHUB (1).html" target="_blank" class="text-sky-600 font-semibold hover:underline">
+          Layar Penuh ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Script -->
+  <script src="script.js"></script>
+</body>
+</html>

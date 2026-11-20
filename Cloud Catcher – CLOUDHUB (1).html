@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cloud Catcher – CLOUDHUB</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;600&display=swap">
+<style>
+:root{--bg:#EDF3F7;--ink:#12243A;--mu:#5B6B7D;--ac:#0B7A75;--ac2:#F0A030;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1A28;--ink:#E8F0F6;--mu:#9DB0C2;--ac:#3CC4BB;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E1A28;--ink:#E8F0F6;--mu:#9DB0C2;--ac:#3CC4BB;color-scheme:dark}
+*{box-sizing:inherit}
+body{margin:0;background:#5BB4F0;color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif;overflow:hidden;height:100vh;height:100dvh}
+h1{font:800 clamp(24px,6vw,34px)/1.1 "Bricolage Grotesque",sans-serif;margin:4px 0 0}h1 b{color:var(--ac)}
+.sub,h1{display:none}
+#hud{position:fixed;top:0;left:0;right:0;z-index:5;padding:calc(env(safe-area-inset-top,0px) + 10px) 120px 10px 12px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:16px;color:#12243A;background:linear-gradient(rgba(255,255,255,.55),transparent);pointer-events:none}
+#hud b{font-family:"Bricolage Grotesque",sans-serif;font-size:18px}
+.wrap{position:fixed;inset:0;touch-action:none}
+canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;background:#5BB4F0}
+.ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;background:rgba(8,20,34,.82);color:#fff;gap:6px}
+.ov h2{font:800 30px "Bricolage Grotesque",sans-serif;margin:0}.ov p{margin:2px 0;max-width:30ch}
+.big{font:800 64px/1 "Bricolage Grotesque",sans-serif;color:#F0A030}
+.code{font:800 22px "Bricolage Grotesque",sans-serif;color:#3CE6B8}
+.tip{font-size:14px;opacity:.85}
+.btn{border:0;background:#F0A030;color:#1A1204;font:700 17px Figtree,sans-serif;padding:12px 28px;border-radius:12px;cursor:pointer;margin-top:8px}
+.btn:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.lg{display:flex;gap:14px;justify-content:center;font-size:14px;margin:6px 0}
+#fs{position:fixed;top:calc(env(safe-area-inset-top,0px) + 8px);right:10px;z-index:6;border:0;border-radius:10px;background:rgba(18,36,58,.85);color:#fff;font:600 14px Figtree,sans-serif;padding:8px 12px;cursor:pointer}
+#fs:focus-visible{outline:3px solid #F0A030;outline-offset:2px}
+</style></head>
+<body>
+<h1>CLOUD<b>CATCHER</b></h1>
+<p class="sub">Game seru dari stand CLOUDHUB</p>
+<div id="hud"><span>Skor <b id="hs">0</b></span><span>Kombo <b id="hc">x1</b></span><span>Nyawa <b id="hl">❤❤❤</b></span><span>Perisai <b id="hp">0</b></span></div>
+<button id="fs" onclick="fsT()">Layar penuh</button><div class="wrap"><canvas id="c" aria-label="Area permainan Cloud Catcher"></canvas>
+<div class="ov" id="ov"></div></div>
+<script>
+var cv=document.getElementById("c"),g=cv.getContext("2d"),W=360,H=520,ov=document.getElementById("ov");
+function rs(){W=Math.max(300,Math.min(900,Math.round(H*innerWidth/innerHeight)));cv.width=W;cv.height=H;if(typeof G==="object"&&G)G.px=Math.min(G.px,W-40)}
+rs();addEventListener("resize",rs);
+var GOOD=[["📁","File disimpan di cloud storage"],["🖼️","Foto dicadangkan otomatis"],["🎬","Video diunggah ke server"],["✉️","Email tersinkron di semua perangkat"],["🎵","Musik di-stream dari cloud"]];
+var TIPS=["VM adalah komputer virtual yang berjalan di atas server fisik.","Firewall menentukan port mana yang boleh diakses dari internet.","Cloud menagih sesuai pemakaian, jadi matikan VM yang tidak dipakai.","Data di cloud biasanya disalin ke beberapa lokasi agar tetap aman.","Autentikasi dua langkah membuat akunmu jauh lebih sulit dibobol."];
+var best=0;try{best=+localStorage.getItem("cc_best")||0}catch(z){}
+var calm=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;
+var keys={},fl=[],cl=[{x:40,y:70,s:1},{x:230,y:150,s:.7},{x:120,y:250,s:.85}];
+var G={on:false,s:0,l:3,sh:0,px:W/2,it:[],f:0,cb:0};
+function reset(){G={on:true,s:0,l:3,sh:0,px:W/2,it:[],f:0,cb:0};fl=[];hud()}
+function hud(){document.getElementById("hs").textContent=G.s;document.getElementById("hc").textContent="x"+(1+Math.floor(G.cb/5));document.getElementById("hl").textContent="❤".repeat(Math.max(0,G.l));document.getElementById("hp").textContent=G.sh}
+function show(h){ov.innerHTML=h;ov.style.display="flex"}
+function start(){reset();ov.style.display="none"}
+function intro(){show('<h2>Cloud Catcher</h2><p>Geser server untuk menangkap data dan simpan di cloud.</p><div class="lg"><span>📁🖼️🎬 +skor</span><span>🛡️ perisai</span><span>🔴 virus bergerigi: hindari</span></div><p class="tip">Tangkap berturut-turut untuk kombo. Capai skor 150 untuk kode hadiah di stand.</p><button class="btn" onclick="start()">Mulai main</button>')}
+function pop(x,t){fl.push({x:Math.max(95,Math.min(W-95,x)),y:H-90,t:t,a:60})}
+function hit(o){
+if(o.k==="g"){G.cb=Math.min(G.cb+1,20);G.s+=10*(1+Math.floor(G.cb/5));pop(o.x,o.e[1])}
+else if(o.k==="s"){G.sh=Math.min(3,G.sh+1);pop(o.x,"Perisai aktif!")}
+else{G.cb=0;if(G.sh>0){G.sh--;pop(o.x,"Virus diblokir!")}else{G.l--;pop(o.x,"Terkena virus!");if(G.l<=0){over()}}}
+hud()}
+function over(){
+G.on=false;var nb=G.s>best;if(nb){best=G.s;try{localStorage.setItem("cc_best",best)}catch(z){}}
+var rk=G.s<100?"Pemula Cloud":G.s<250?"Admin Cloud":G.s<500?"Arsitek Cloud":"Master Cloud";
+var cd=G.s>=150?'<p class="code">Kode: CH-'+(1000+Math.floor(Math.random()*9000))+'</p><p>Tunjukkan layar ini ke penjaga stand CLOUDHUB untuk hadiahmu.</p>':'<p>Capai skor 150 untuk mendapat kode hadiah di stand CLOUDHUB.</p>';
+show('<h2>Game selesai</h2><div class="big">'+G.s+'</div><p>Peringkat: <b>'+rk+'</b></p><p>'+(nb?"Rekor baru!":"Skor terbaik: "+best)+'</p>'+cd+'<p class="tip">Tahukah kamu? '+TIPS[Math.floor(Math.random()*TIPS.length)]+'</p><button class="btn" onclick="start()">Main lagi</button>')}
+function virus(x,y,t){
+var r=20,p=1+.06*Math.sin(t/6);
+g.save();g.translate(x,y);g.scale(p,p);
+g.fillStyle="rgba(255,59,92,.28)";g.beginPath();g.arc(0,0,36,0,7);g.fill();
+g.lineCap="round";
+for(var i=0;i<10;i++){var a=i*Math.PI/5+t/60,c=Math.cos(a),s=Math.sin(a);g.strokeStyle="#7A1230";g.lineWidth=4;g.beginPath();g.moveTo(c*r,s*r);g.lineTo(c*(r+10),s*(r+10));g.stroke();g.fillStyle="#FF3B5C";g.beginPath();g.arc(c*(r+11),s*(r+11),4.5,0,7);g.fill()}
+g.fillStyle="#D61F45";g.beginPath();g.arc(0,0,r,0,7);g.fill();g.lineWidth=3;g.strokeStyle="#7A1230";g.stroke();
+g.fillStyle="#fff";g.beginPath();g.arc(-7,-4,5,0,7);g.arc(7,-4,5,0,7);g.fill();
+g.fillStyle="#1a0510";g.beginPath();g.arc(-6,-3,2.3,0,7);g.arc(8,-3,2.3,0,7);g.fill();
+g.strokeStyle="#1a0510";g.lineWidth=2.5;g.beginPath();g.moveTo(-13,-12);g.lineTo(-3,-8);g.moveTo(13,-12);g.lineTo(3,-8);g.stroke();
+g.beginPath();g.arc(0,10,6,Math.PI*1.1,Math.PI*1.9);g.stroke();
+g.restore();
+g.font="800 11px sans-serif";g.lineWidth=3;g.strokeStyle="#7A1230";g.strokeText("VIRUS",x,y+38);g.fillStyle="#fff";g.fillText("VIRUS",x,y+38);
+g.font="30px serif"}
+function cloud(x,y,s){g.beginPath();g.arc(x,y,22*s,0,7);g.arc(x+26*s,y-10*s,28*s,0,7);g.arc(x+56*s,y,22*s,0,7);g.fill()}
+function step(){
+if(G.on){G.f++;var lv=1+G.s/150;
+if(keys.ArrowLeft)G.px-=7;if(keys.ArrowRight)G.px+=7;G.px=Math.max(40,Math.min(W-40,G.px));
+if(G.f%Math.max(15,46-Math.floor(G.s/25))===0){var r=Math.random(),k=r<.68?"g":r<.9?"v":"s",n={x:30+Math.random()*(W-60),y:-20,k:k,v:2+Math.random()*1.2+lv*.5};
+n.e=k==="g"?GOOD[Math.floor(Math.random()*GOOD.length)]:k==="v"?["🦠"]:["🛡️"];G.it.push(n)}
+for(var i=G.it.length-1;i>=0;i--){var o=G.it[i];o.y+=o.v;
+if(o.y>H-72&&o.y<H-28&&Math.abs(o.x-G.px)<46){G.it.splice(i,1);hit(o);if(!G.on)break}else if(o.y>H+20)G.it.splice(i,1)}}
+draw();requestAnimationFrame(step)}
+function draw(){
+var gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,"#5BB4F0");gr.addColorStop(1,"#D6EEFB");g.fillStyle=gr;g.fillRect(0,0,W,H);
+g.fillStyle="rgba(255,255,255,.85)";
+cl.forEach(function(c){if(!calm)c.x+=.15*c.s;if(c.x>W+60)c.x=-90;cloud(c.x,c.y,c.s)});
+g.font="30px serif";g.textAlign="center";g.textBaseline="middle";
+G.it.forEach(function(o){if(o.k==="v")virus(o.x,o.y,G.f);else g.fillText(o.e[0],o.x,o.y)});
+var x=G.px-40,y=H-62;
+if(G.sh>0){g.strokeStyle="rgba(240,160,48,.95)";g.lineWidth=2+G.sh;g.beginPath();g.arc(G.px,y+20,54,0,7);g.stroke()}
+g.fillStyle="#12243A";g.fillRect(x,y,80,40);g.fillStyle="#1F3A5A";g.fillRect(x+6,y+6,68,10);g.fillRect(x+6,y+22,68,10);
+g.fillStyle=(G.f%30<15)?"#3CE6B8":"#F0A030";g.fillRect(x+10,y+9,4,4);g.fillRect(x+10,y+25,4,4);
+g.fillStyle="#fff";g.font="700 9px sans-serif";g.fillText("CLOUDHUB",G.px+8,y+11);
+g.font="700 14px sans-serif";
+for(var i=fl.length-1;i>=0;i--){var f=fl[i];f.y-=.8;f.a--;if(f.a<=0){fl.splice(i,1);continue}
+g.globalAlpha=Math.min(1,f.a/30);g.fillStyle="#12243A";g.fillText(f.t,f.x,f.y);g.globalAlpha=1}}
+function mv(ev){var r=cv.getBoundingClientRect();if(G.on)G.px=(ev.clientX-r.left)*W/r.width}
+cv.addEventListener("pointermove",mv);cv.addEventListener("pointerdown",mv);
+addEventListener("keydown",function(e){if(e.key==="ArrowLeft"||e.key==="ArrowRight"){keys[e.key]=1;e.preventDefault()}});
+addEventListener("keyup",function(e){keys[e.key]=0});
+function fsT(){var d=document,el=d.documentElement;try{if(d.fullscreenElement){d.exitFullscreen()}else if(el.requestFullscreen){el.requestFullscreen().catch(function(){})}}catch(z){}}
+intro();step();
+</script></body></html>

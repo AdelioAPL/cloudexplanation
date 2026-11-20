@@ -1,0 +1,104 @@
+/* ========================================================
+   CUSTOM STYLES & ANIMATIONS
+   Terinspirasi dari estetika Deflexai (Modern, Clean, Radial Orbits)
+   Full Responsive Support (Mobile, Tablet, Desktop)
+   ======================================================== */
+
+/* Concentric Orbit Rings Background (Responsive & Centered) */
+.orbit-circle {
+  position: absolute;
+  border-radius: 9999px;
+  border: 1px solid rgba(226, 232, 240, 0.7); /* Slate 200 */
+  pointer-events: none;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+/* Floating Keyframe Animation (Smooth & Subtle) */
+@keyframes subtleFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: subtleFloat 5s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: subtleFloat 6s ease-in-out 1.5s infinite;
+}
+
+.animate-float-slow {
+  animation: subtleFloat 7s ease-in-out 3s infinite;
+}
+
+/* Floating Icon Badges (Sesuai Referensi Deflexai: lingkaran putih bersih dengan shadow lembut) */
+.hero-floating-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 9999px;
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  user-select: none;
+  cursor: default;
+}
+
+.hero-floating-icon:hover {
+  transform: scale(1.12) translateY(-4px) !important;
+  box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.14);
+}
+
+/* Active Filter Tab */
+.filter-btn.active-tab {
+  background-color: #0f172a; /* Slate 900 */
+  color: #ffffff;
+  box-shadow: 0 2px 8px -1px rgba(15, 23, 42, 0.15);
+}
+
+/* Card hover soft glow */
+.skill-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.skill-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Mobile Navigation Dropdown Animation */
+#mobileMenu {
+  transition: all 0.25s ease-in-out;
+}
+#mobileMenu.menu-hidden {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.98);
+  pointer-events: none;
+  visibility: hidden;
+}
+#mobileMenu.menu-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  visibility: visible;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
